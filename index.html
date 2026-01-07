@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подкомитет Связи с Общественностью</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-color: #f5fbdf;
+            --text-color: #3dacaa;
+            --subtitle-color: #ec4b2f;
+            --accent-color: #4a69bd;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+        }
+
+        /* Заставка */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .splash-content {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .splash-logo {
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(61, 172, 170, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        .splash-logo img {
+            max-width: 100%;
+            height: auto;
+            max-height: 200px;
+        }
+
+        .splash-title {
+            color: var(--text-color);
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        .survey-title {
+            color: var(--subtitle-color);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            line-height: 1.3;
+            word-wrap: break-word;
+        }
+
+        .survey-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .survey-item {
+            background: rgba(61, 172, 170, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(61, 172, 170, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            min-height: 90px;
+            width: 100%;
+        }
+
+        .survey-item:hover {
+            background: rgba(61, 172, 170, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .survey-item.selected {
+            background: rgba(236, 75, 47, 0.2);
+            border-color: var(--subtitle-color);
+        }
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--text-color), #2a8c8a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .survey-item:hover .circle {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #4fc2c0, var(--text-color));
+        }
+
+        .survey-item.selected .circle {
+            background: linear-gradient(135deg, var(--subtitle-color), #d43c28);
+        }
+
+        .survey-question {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            text-align: left;
+            flex: 1;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Полоса прокрутки для заставки */
+        #splash-screen::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #splash-screen::-webkit-scrollbar-track {
+            background: rgba(61, 172, 170, 0.1);
+            border-radius: 3px;
+        }
+
+        #splash-screen::-webkit-scrollbar-thumb {
+            background: var(--text-color);
+            border-radius: 3px;
+        }
+
+        #splash-screen::-webkit-scrollbar-thumb:hover {
+            background: #2a8c8a;
+        }
+
+        /* Основной сайт */
+        #main-site {
+            opacity: 0;
+            display: none;
+            animation: fadeIn 1s ease forwards;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                max-height: 0;
+                opacity: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+            to {
+                max-height: 2000px;
+                opacity: 1;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                max-height: 2000px;
+                opacity: 1;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+            to {
+                max-height: 0;
+                opacity: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                margin-top: 0;
+                margin-bottom: 0;
+                overflow: hidden;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Шапка */
+        header {
+            background: #f5fbdf;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            padding: 10px 0;
+            border-bottom: 2px solid var(--text-color);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            max-width: 60px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            margin-left: 15px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        nav a:hover {
+            color: var(--subtitle-color);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--subtitle-color);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0px;
+        }
+
+        /* Герой секция */
+        .hero {
+            padding: 150px 0 80px;
+            background: linear-gradient(rgba(1, 16, 61, 0.6), rgba(30, 55, 153, 0.5)), url('1445.jpg');
+            background-size: cover; 
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 60px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 25px;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background: var(--subtitle-color);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--subtitle-color);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+            margin-top: 10px;
+        }
+
+        .hero-btn:hover {
+            background: transparent;
+            border-color: white;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Секции */
+        section {
+            padding: 60px 0;
+            width: 100%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.8s ease forwards;
+            line-height: 1.2;
+            word-wrap: break-word;
+            padding: 0 10px;
+        }
+
+        .section-subtitle {
+            color: var(--subtitle-color);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.3;
+            word-wrap: break-word;
+            padding: 0 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--subtitle-color);
+            border-radius: 2px;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+            word-wrap: break-word;
+        }
+
+        .about-text p:nth-child(1) { animation-delay: 0.1s; }
+        .about-text p:nth-child(2) { animation-delay: 0.3s; }
+        .about-text p:nth-child(3) { animation-delay: 0.5s; }
+
+        .about-image {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            transform: perspective(1000px) rotateY(-5deg);
+            transition: transform 0.5s ease;
+            opacity: 0;
+            transform: translateY(50px) perspective(1000px) rotateY(-5deg);
+            animation: fadeInUp 0.8s ease 0.7s forwards;
+            width: 100%;
+        }
+
+        .about-image:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        /* Услуги */
+        .services {
+            background: rgba(61, 172, 170, 0.05);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            border-top: 4px solid var(--subtitle-color);
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .service-card.animated {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.3s; }
+        .service-card:nth-child(3) { animation-delay: 0.5s; }
+        .service-card:nth-child(4) { animation-delay: 0.7s; }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            border-top-color: var(--text-color);
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--subtitle-color);
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            line-height: 1.3;
+            word-wrap: break-word;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-card p {
+            color: var(--text-color);
+            line-height: 1.5;
+            font-size: 1rem;
+            word-wrap: break-word;
+            display: none; /* Скрываем по умолчанию */
+        }
+
+        .service-card p.visible {
+            display: block;
+            animation: slideDown 0.5s ease forwards;
+        }
+
+        .service-card p.hidden {
+            animation: slideUp 0.5s ease forwards;
+            overflow: hidden;
+        }
+
+        .service-card .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .details-btn {
+            background: var(--text-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            align-self: center;
+            min-width: 140px;
+        }
+
+        .details-btn:hover {
+            background: var(--subtitle-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .details-btn.active {
+            background: var(--subtitle-color);
+        }
+
+        /* Члены подкомитета */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* Контакты */
+        .contacts {
+            background: var(--text-color);
+            color: white;
+            padding-top: 100px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .contacts .section-title {
+            color: white;
+        }
+
+        .contacts .section-title::after {
+            background: var(--subtitle-color);
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+        }
+
+        .contact-info {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+            word-wrap: break-word;
+        }
+
+        .contact-info div {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .contact-info i {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: var(--subtitle-color);
+            width: 25px;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .contact-form {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+            width: 100%;
+        }
+
+        .contact-form h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            line-height: 1.3;
+        }
+
+        .contact-form iframe {
+            width: 100%;
+            height: 300px;
+            border: none;
+            border-radius: 10px;
+        }
+
+        /* Футер */
+        footer {
+            background: #2a8c8a;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .footer-content .logo {
+            color: white;
+        }
+
+        .footer-content .logo i {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin: 0 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--subtitle-color);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            margin-top: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+            padding: 0 10px;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .splash-content {
+                max-height: 85vh;
+            }
+            
+            .splash-title {
+                font-size: 1.8rem;
+            }
+            
+            .survey-title {
+                font-size: 1.4rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+                position: relative;
+                right: 0px;
+            }
+            
+            nav ul {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 60px);
+                background: var(--bg-color);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 30px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                z-index: 99;
+            }
+            
+            nav ul.active {
+                left: 0;
+            }
+            
+            nav li {
+                margin: 12px 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav a {
+                display: block;
+                padding: 10px;
+                font-size: 1.1rem;
+            }
+            
+            .hero {
+                padding: 120px 0 60px;
+                background-attachment: scroll;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+                padding: 0 10px;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+                padding: 0 10px;
+            }
+            
+            .splash-title {
+                font-size: 1.6rem;
+                padding: 0 10px;
+            }
+            
+            .survey-title {
+                font-size: 1.3rem;
+                padding: 0 10px;
+            }
+            
+            .survey-container {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .splash-content {
+                padding: 10px;
+                max-height: 80vh;
+            }
+            
+            .logo img {
+                max-width: 50px;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
+            .service-card {
+                padding: 20px;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .splash-logo {
+                font-size: 2rem;
+            }
+            
+            .splash-logo img {
+                max-height: 150px;
+            }
+            
+            .circle {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+                margin-right: 12px;
+            }
+            
+            .survey-question {
+                font-size: 1rem;
+            }
+            
+            .survey-item {
+                min-height: 80px;
+                padding: 12px;
+            }
+            
+            .hero-btn {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+            
+            .service-card {
+                padding: 15px;
+            }
+            
+            .service-icon {
+                font-size: 2rem;
+            }
+            
+            .service-card h3 {
+                font-size: 1.2rem;
+                min-height: 50px;
+            }
+            
+            section {
+                padding: 40px 0;
+            }
+            
+            .details-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .splash-content {
+                max-height: 80vh;
+                overflow-y: auto;
+                padding: 10px;
+            }
+            
+            .splash-title {
+                margin-bottom: 15px;
+                font-size: 1.5rem;
+            }
+            
+            .survey-title {
+                margin-bottom: 15px;
+                font-size: 1.2rem;
+            }
+            
+            .survey-container {
+                margin-top: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .survey-item {
+                min-height: 75px;
+                padding: 12px;
+            }
+            
+            .splash-logo img {
+                max-height: 120px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .section-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .about-text p {
+                font-size: 1rem;
+            }
+            
+            .survey-question {
+                font-size: 0.95rem;
+            }
+            
+            .circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                margin-right: 10px;
+            }
+            
+            .service-card h3 {
+                font-size: 1.1rem;
+            }
+        }
+        
+        .mobile-menu-btn {
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Заставка с опросом -->
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <img src="PSO.PNG" alt="Логотип ПСО">
+            </div>
+            <h1 class="splash-title">Подкомитет связи с общественностью</h1>
+            <h2 class="survey-title">Пожалуйста, ответьте на вопрос: "Знали ли вы, чем занимается подкомитет связи с общественностью?"</h2>
+            <div class="survey-container">
+                <div class="survey-item" data-question="1">
+                    <div class="circle">1</div>
+                    <div class="survey-question">Слышал, но не вникал</div>
+                </div>
+                <div class="survey-item" data-question="2">
+                    <div class="circle">2</div>
+                    <div class="survey-question">Знал все о подкомитете</div>
+                </div>
+                <div class="survey-item" data-question="3">
+                    <div class="circle">3</div>
+                    <div class="survey-question">Нет, не знал</div>
+                </div>
+                <div class="survey-item" data-question="4">
+                    <div class="circle">4</div>
+                    <div class="survey-question">Я новичок</div>
+                </div>
+            </div>
+            <p style="color: var(--text-color); font-size: 0.9rem; margin-top: 15px; opacity: 0.8; padding: 0 10px;">
+                Ваш ответ очень поможет нам. Пожалуйста, выберите один из вариантов.
+            </p>
+        </div>
+    </div>
+
+    <!-- Основной сайт -->
+    <div id="main-site">
+        <!-- Шапка -->
+        <header>
+            <div class="container header-content">
+                <div class="logo">
+                    <img src="PSO.PNG" alt="Логотип ПСО">
+                    <span>ПСО</span>
+                </div>
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav>
+                    <ul id="nav-menu">
+                        <li><a href="#home">Главная</a></li>
+                        <li><a href="#about">О нас</a></li>
+                        <li><a href="#services">Служения</a></li>
+                        <li><a href="#contacts">Собрания</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Герой секция -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h1>Подкомитет Связи с Общественностью</h1>
+                <p>Объединяем усилия для эффективного взаимодействия с обществом</p>
+                  <p>Добавляйся в рабочий чат и внеси свою  историю с дружным коллективом ПСО</p>
+                <a href="https://t.me/+wQkCGHrwf6IzMmIy" target="_blank" class="hero-btn">Чат ПСО</a>
+            </div>
+        </section>
+
+        <!-- О нас -->
+        <section id="about">
+            <div class="container">
+                <h2 class="section-title">О нашем подкомитете</h2>
+                <h3 class="section-subtitle">Подкомитет Связи с Общественностью</h3>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Связи с общественностью в АН – это деятельность, направленная на установление взаимоотношений с обществом, информирование общественности о целях и задачах АН, формирование в обществе позитивного образа АН.</p>
+                        <p>Основной целью работы Подкомитета СО является информирование общественности о существовании и деятельности сообщества «Анонимные наркоманы» (далее – АН), предоставление достоверной и объективной информации о нём.</p>
+                  
+                        <p>Подкомитет СО и его служащие в своей деятельности руководствуются 12 традициями и 12 концепциями АН</p>
+                        <p>Подкомитет был создан для эффективного взаимодействия с обществом.</p>
+                        <p>За годы работы мы добились значительных результатов в области общественных связей.</p>
+                      
+                        <p>Взаимодействуем с различными общественными организациями, государственными структурами, мед организациями и профессиональными структурами.</p><br>
+                          <div  style="width: 70%; margin: 0 auto;" class="about-image">
+                        <img src="PSO.PNG" alt="Подкомитет связи с общественностью">
+                    </div> <br><br>
+                        
+                    <h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
+Подкомитета по связям с общественностью:</h3> 
+<p> 1. Мы уточняем, какие услуги
+сообщество может оказывать
+обществу, а какие – нет <br><br>
+2. Мы делаем понятной роль,
+которую члены АН играют
+в обществе<br><br>
+3. Мы развиваем и доносим
+позитивный образ программы
+АН до общества в целом
+Narcotics Anonymous ®
+Анонимные Наркоманы
+<br><br>
+
+4. Мы рассказываем членам
+сообщества о важности их роли
+в общественном образе АН<br><br>
+5. Мы развиваем ценные
+взаимоотношения с широкой
+общественностью<br><br>
+6. Мы стремимся к тому, чтобы
+общественность воспринимала
+АН как добропорядочную
+и надежную организацию</p><br>  
+<br>
+        <div  style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок9.PNG" alt="Подкомитет связи с общественностью">
+                    </div> <br> <br> 
+
+<h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
+Подкомитета по связям с общественностью:</h3><br> 
+ <p>• Государственные учреждения:
+ФСИН, МВД и т.д.<br> <br> 
+• Учреждения здравоохранения:
+государственные и частные<br> <br> 
+• Религиозные учреждения<br> <br> 
+• Интернет пространство<br> <br> 
+
+• Интернет пространство<br> <br> 
+• СМИ: печатные издания, радио<br> <br> 
+• Размещение информационных
+материалов об АН: транспорт,
+рекламные конструкции,
+информационные доски и т.д.<br> 
+
+
+
+</p>
+        <div  style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок8.PNG" alt="Подкомитет связи с общественностью">
+                    </div> 
+<br> <br> 
+
+                    <h3 style="text-align: center;" class="section-subtitle"    >Ресурсы на обслуживании
+Подкомитета по связям с общественностью</h3><br> 
+<div  style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок10.PNG" alt="Подкомитет связи с общественностью">
+                    </div> <br> <br> 
+
+                    <h3 style="text-align: center;" class="section-subtitle" >Размещение информации о сообществе</h3>
+<br> 
+                    <div  style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок11.PNG" alt="Подкомитет связи с общественностью">
+                    </div> <br>
+
+<h3 style="text-align: center;" class="section-subtitle"  >Взаимодействие с профессионалами</h3><br>
+
+<p>•Презентация сообщества в Пермской
+краевой психиатрической больнице<br> 
+Совместные поездки с подкомитетом
+БУ в Кунгурский Туберкулезный
+диспансер и Пермскую
+психиатрическую больницу
+с презентациями<br> 
+•Презентация сообщества
+для главного врача
+Пермской станции
+Скорой помощи
+<br> 
+
+•Взаимодействие с психологами
+при ФСИН для решения вопроса
+о несении вести в исправительных
+учреждениях и размещения
+информации о сообществе
+в учреждениях УИИ<br> 
+•Встреча с руководителем УИИ<br> <br> 
+Договоренность
+с ВИЧ-отделением Пермской
+инфекционной больницы:<br> <br>
+• Несение вести на территории
+учреждения<br>
+• Размещение
+информационных
+носителей <br><br>
+Взаимодействие
+с Пермской наркологией:<br> 
+• Несение вести на территории
+учреждения<br> 
+• Размещение
+информационных
+носителей<br> 
+</p>
+   <div  style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок1.PNG" alt="Подкомитет связи с общественностью">
+                    </div> 
+
+
+            
+                    </div>
+
+                   
+                </div>
+               
+            </div>
+        </section>
+
+        <!-- Услуги -->
+        <section class="services" id="services">
+            <div class="container">
+                <h2 class="section-title">Служения</h2>
+                <h3 class="section-subtitle">Все служения</h3>
+                <div class="services-grid">
+                    
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Председатель ПСО</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Координация работы Подкомитета СО и обеспечение его стабильного и эффективного функционирования;<br>
+Проведение рабочих собраний Подкомитета СО;<br>
+Составление повестки рабочих собраний Подкомитета СО;<br>
+Контроль за соблюдением 12 традиций и 12 концепций АН, а также принципов работы Подкомитета СО;<br>
+Привлечение новых служащих;<br>
+Контроль за выполнением принятых решений;<br>
+Предоставление отчёта о деятельности Подкомитета на собрании МКО «АН Пермь»;<br>
+Участие в рабочем собрании Регионального ПСО УрЗС и предоставление отчёта о работе Подкомитета СО;<br>
+Поддержание контакта с комитетами СО в регионе;<br>
+Внесение предложений по улучшению работы Подкомитета СО;<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета СО.<br>
+Требования к кандидату:<br>
+Иметь от 2-х лет чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 2 года.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                         <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Вице-председатель Подкомитета СО</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Участие в работе Подкомитета, взаимодействие с председателем, обеспечение стабильного и эффективного функционирования Подкомитета;<br>
+Исполнение обязанностей Председателя Подкомитета СО при его отсутствии, несение ответственности за работу Подкомитета. Наряду с этим, при наличии председателя, может брать на себя некоторые его функции (например, вести собрание или отчитываться о работе Подкомитета на собрании МКО);<br>
+Исполнение обязанностей любого должностного лица Подкомитета СО (после согласования с Подкомитетом);<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 1 года чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 2 года.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                           <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Секретарь Подкомитета СО</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Ведение протокола рабочего собрания Подкомитета, размещение протокола в Google-папках ПСО, МКО «АН Пермь» и WhatsApp-группе Подкомитета в течение 5 рабочих дней;<br>
+Составление, систематизация, хранение и обновление базы данных (телефоны, электронные и почтовые адреса, контактные лица) организаций и учреждений, с помощью которых Подкомитет может информировать общественность о существовании АН;
+Администрирование Google-папки Подкомитета СО;<br>
+Создание и обновление базы данных всех должностных лиц Подкомитета (имя, телефон), а также членов сообщества АН, желающих участвовать в работе СО (имя, телефон);<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 1 года чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Пиарщик и HR</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Создание флаеров и информационных сообщений о мероприятиях и проектах Подкомитета, распространение их в чатах групп и структуры, Whatsаpp-рассылке местности;<br>
+Взаимодействие с участниками МКО, Подкомитетов и групп в целях их информирования о мероприятиях и проектах Подкомитета;<br>
+Предоставление информации о Подкомитете во время объявлений на собраниях групп;<br>
+Поиск и привлечение в служение на Подкомитете участников сообщества;<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 3 месяцев чистого времени;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Иметь смартфон или ПК;<br>
+Срок служения - 6 месяцев.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Координатор по информации и взаимодействию с группами</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Взаимодействие с представителями групп в целях получения актуальной информации о проведении собраний;<br>
+Ведение и поддержание в актуальном состоянии списка ПГО и представителей групп местности «АН Пермь» (имена, номера телефонов);<br>
+Составление расписания собраний групп местности «АН Пермь», актуализирует его ежемесячно, а при поступлении информации об изменениях не позднее следующего дня;<br>
+Отправка расписания собраний в рассылку еженедельно, а при внесении изменений в расписание – в тот же день, в формате изображения;<br>
+Ведение и редактирование таблицы Расписание АН пермь.<br>
+Взаимодействие со служащими, ответственными за размещение информации о проведении собраний на информационных ресурсах местности и региона (интернет-сайт, whatsapp-рассылка, telegram-бот, онлайн-карты и др), в целях предоставления актуальной информации о проведении собраний на местности «АН Пермь»<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 3 месяцев чистого времени;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Иметь и знать ПК (Интернет, почта, Google-сервисы, текстовые приложения);<br>
+Срок служения – 6 месяцев.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Координатор по презентациям на группах</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Установление, поддержание и развитие контактов с группами местности «АН Пермь»;<br>
+Организация и координация презентаций (связь с представителем группы, время проведения, тематика, распределение сфер ответственности между участниками презентации, наличие раздаточного материала и/или литературы, соблюдение традиций и правил проведения презентации);<br>
+Проведение презентации Подкомитета для групп, либо поручение проведения мероприятий ведущему подкомитета из списка волонтеров Подкомитета (утвержденного Подкомитетом), при этом сам участвует как организатор и координатор презентации;<br>
+При необходимости проведение подготовительных мероприятий с участниками презентации для разъяснения целей и методов работы Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 6 месяцев чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Координатор проекта «Реклама»</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Изготовление или организация изготовления макетов и проектов флаеров для размещения на рекламных носителях;<br>
+Установление, поддержание и развитие контактов с рекламодателями; <br>
+Составление, систематизация, хранение и обновление базы данных  рекламодателей (ФИО, должность, телефон, e-mail контактного лица), размещение базы данных в Google-папке Подкомитета.<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 1 года чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Администратор онлайн-карт</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Создание, наполнение и регулярное обновление базы данных о собраниях и группах местности АН Пермь на онлайн-картах Yandex, Google, 2Гис (адреса, расписание, телефон ИЛ, веб-сайт, фотографии при необходимости после согласования с группой);<br>
+Взаимодействие с группами по вопросам размещения информации о группе на онлайн-картах;<br>
+Взаимодействие с технической поддержкой онлайн-карт от имени сообщества;<br>
+В случае получения писем от представителей онлайн-карт подготовка и отправка (по согласованию с Председателем Подкомитета);<br>
+По заданию Подкомитета связывается с адресатами, которым были направлены письма и не получен ответ, и выясняет ситуацию;<br>
+Предоставление отчета о своём служении к рабочему собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 1 года чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Администратор Whatsapp и Telegram рассылки</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Осуществление 	Whatsapp-рассылки информации о собраниях 	групп, мероприятиях местности АН Пермь;<br>
+Добавление 	в рассылку новых участников по запросам, 	поступившим на номер рассылки;<br>
+Взаимодействие 	с участниками МКО, Подкомитетов и групп 	в целях получения актуальной информации 	о планируемых мероприятиях;<br>
+Информирование 	членов сообщества АН Пермь о проекте 	и его целях;<br>
+Соблюдение 	правил Whatsаpp-рассылки (приложение № 	15.1);<br>
+Предоставление 	отчета о своём служении к рабочему 	собранию Подкомитета.
+Требования к кандидату:<br>
+Иметь от 6 мес чистого времени;<br>
+Работа по программе АН;<br>
+Знать 	12 традиций и 12 концепций АН;<br>
+Иметь устройство, поддерживающее Whatsаpp и Telegram;<br>
+Срок 	служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Волонтер мессенджеров</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:
+Ответы 	на вопросы, поступившие на номер телефона 	в мессенджерах, а также в ВК, касающиеся 	сообщества АН;<br>
+Участие 	в тренингах и семинарах по служению на 	информационной линии АН;<br>
+Предоставление 	отчета о своём служении к рабочему 	собранию Подкомитета.<br>
+Ведение таблицы с отчетом по мессенджерам.<br>
+Требования к кандидату:<br>
+Иметь от 1 года чистого времени;<br>
+Работа по программе АН;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 	12 традиций и 12 концепций АН;<br>
+Иметь устройство, поддерживающее необходимые 	приложения для служения;<br>
+Срок 	служения - бессрочно.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Координатор по тренингам</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Установление, поддержание и развитие контактов с группами местности «АН Пермь»;<br>
+Организация и координация тренингов (связь с представителем группы, время проведения, тематика, распределение сфер ответственности между участниками тренинга, наличие раздаточного материала и/или литературы, соблюдение традиций и правил проведения презентации);<br>
+Проведение тренингов Подкомитета, либо поручение проведения мероприятий ведущего презентаций из списка волонтеров Подкомитета (утвержденного Подкомитетом), при этом сам участвует как организатор и координатор презентации и тренинга;<br>
+При необходимости проведение подготовительных мероприятий с участниками тренинга для разъяснения целей и методов работы Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 6 месяцев чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Администратор сайта местности</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+- Своевременно обновлять/добавлять расписание групп, касающуюся их информацию<br>
+- Следить за работоспособностью сайта<br>
+- Способствовать устранению багов и недоработок на сайте<br>
+- Своевременно предоставлять статистику по сайту в форме отчета<br>
+- Надежно хранить, использовать по назначению все доверенные ссылки и пароли (ссылка на админку сайта, вероятно Телеграм, Яндекс аккаунт)<br>
+-производить оплату за доменное имя сайта в установленные даты<br>
+Требования к кандидату:<br>
+Иметь от 1,5 лет чистого времени;<br>
+Иметь опыт служения в Подкомитете СО;<br>
+Знать 12 традиций и 12 концепций АН;<br>
+Работать по 12 шагам АН, иметь спонсора в АН;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Волонтер на трубке ИЛ.</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Отвечать 	на звонки с 10 до 22 часов;<br>
+Информировать 	звонящих о сообществе АН, предоставлять 	актуальную информацию о проводимых 	собраниях;<br>
+Посещать 	тренинги для волонтёров на трубке (зум 	или живые) не реже 1 раза в квартал;<br>
+Отправлять 	отчет о принятых звонках в ватсап-чат 	ИЛ Пермь по истечению календарного 	месяца; <br>
+Передавать 	трубку следующему волонтеру по очереди, 	в соответствии с графиком;<br>
+Волонтер 	на переадресации скидывает данные о 	звонках волонтёру с основной трубкой;<br>
+Сообщать 	о проблемах в служении, а также о 	невозможности временно исполнять 	служение, в чат ИЛ Пермь;<br>
+Перенаправлять 	запросы от профессионалов в подкомитет 	СО
+.Требования к кандидату:<br>
+Иметь от 1 года чистого времени;<br>
+Работа по шагам АН;<br>
+Знание 12 традиций и 12 концепций АН;<br>
+Отсутствие 	конфликта интересов (например, работа 	в РЦ);<br>
+Личный 	смартфон с выходом в интернет;<br>
+Желателен 	опыт служения в подкомитете СО;<br>
+Посещение 	тренинга ИЛ;</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Автор контента группы ВК.</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Составление контент-плана и согласование с подкомитетом;<br>
+Следить за актуальностью информации на странице АН Пермь ВК;<br>
+Освещать 	открытые мероприятия местности АН 	Пермь;<br>
+Поддерживать взаимодействие со служащими СО и ИЛ;<br>
+Отчитываться о своем служении в чате СО Пермь и на рабочем собрании.<br>
+Требования к кандидату:<br>
+Иметь 	от 1 года чистого времени;<br>
+Работать 	по 12 шагам АН;<br>
+Знать 	12 традиций и 12 концепций АН;<br>
+Иметь 	устройство, поддерживающее ВК;<br>
+Срок 	служения - 1 год.</p>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content">
+                            <h3>Администратор Telegram-бота</h3>
+                            <button class="details-btn">Подробнее</button>
+                            <p class="service-details">Обязанности:<br>
+Наполнение 	бота следующими разделами:<br>
+«Что такое Анонимные наркоманы» - общая информация об АН;<br>
+«Расписание собраний»;<br>
+«Информация для независимых»;<br>
+«Наши контакты»,<br>
+«Мы в интернете».<br>
+Ответы 	на вопросы, поступившие в Telegram-бот;<br>
+Взаимодействие 	с участниками МКО, Подкомитетов и групп 	в целях получения актуальной информации 	о планируемых мероприятиях;<br>
+Информирование 	членов сообщества «АН Пермь» о проекте 	и его целях;<br>
+Соблюдение 	правил Telegram-бота (приложение № 15.2);<br>
+Предоставление 	отчета о своём служении к рабочему 	собранию Подкомитета.<br>
+Требования к кандидату:<br>
+Иметь от 6 месяцев чистого времени;<br>
+Знать 	12 традиций и 12 концепций АН;<br>
+Иметь устройство, поддерживающее Telegram;<br>
+Срок служения - 1 год.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section class="contacts" id="contacts">
+            <div class="container">
+                <h2 class="section-title">Собрания</h2>
+                <h3 class="section-subtitle">Собрания проходят один раз в месяц, каждое первое воскресенье месяца</h3>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>г. Пермь, ул. Пушкина, д. 13, вход со стороны памятника</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-clock"></i>
+                            <span>Каждое первое воскресенье месяца в 14:00</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-phone"></i>
+                            <span>+7 (XXX) XXX-XX-XX (уточняется)</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-envelope"></i>
+                            <span>pso@example.ru</span>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <h3>Место проведения собраний</h3>
+                        <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A132bdb24a88ad0912f793f7042c3089d6ab77837149adb2d32bc9907e5b05862&amp;width=500&amp;height=400&amp;lang=ru_RU&amp;scroll=true"></script>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Футер -->
+        <footer>
+            <div class="container footer-content">
+                <div class="logo">
+                    <img src="PSO.PNG" alt="Логотип ПСО" style="max-width: 50px;">
+                    <span>Подкомитет Связи с Общественностью</span>
+                </div>
+                <div class="social-links">
+                    <a href="https://t.me/+wQkCGHrwf6IzMmIy" target="_blank"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-vk"></i></a>
+                </div>
+                <div class="copyright">
+                    &copy; 2026 Подкомитет Связи с Общественностью. Все права защищены.<br>
+                    Пермь, Россия
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="bot.js">
+        
+    </script>
+</body>
+</html>
