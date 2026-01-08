@@ -69,6 +69,12 @@
             max-width: 100%;
             height: auto;
             max-height: 200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .splash-logo img:hover {
+            transform: scale(1.02);
         }
 
         .splash-title {
@@ -283,6 +289,12 @@
             max-width: 60px;
             height: auto;
             margin-right: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.02);
         }
 
         nav ul {
@@ -488,6 +500,12 @@
             display: block;
             max-height: 400px;
             object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .about-image img:hover {
+            transform: scale(1.02);
         }
 
         /* Услуги */
@@ -740,6 +758,111 @@
             padding: 0 10px;
         }
 
+        /* МОДАЛЬНОЕ ОКНО ДЛЯ ИЗОБРАЖЕНИЙ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: var(--subtitle-color);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .modal-close:hover {
+            background: #d43c28;
+            transform: scale(1.1);
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 10001;
+        }
+
+        .modal-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-prev {
+            left: 20px;
+        }
+
+        .modal-next {
+            right: 20px;
+        }
+
+        .modal-counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.2rem;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
         /* Адаптивность */
         @media (max-width: 992px) {
             .hero h1 {
@@ -764,6 +887,20 @@
             
             .services-grid {
                 grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            
+            .modal-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            .modal-prev {
+                left: 15px;
+            }
+            
+            .modal-next {
+                right: 15px;
             }
         }
 
@@ -865,6 +1002,33 @@
             .services-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .modal-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .modal-prev {
+                left: 10px;
+            }
+            
+            .modal-next {
+                right: 10px;
+            }
+            
+            .modal-close {
+                top: -50px;
+                right: 0;
+                width: 35px;
+                height: 35px;
+                font-size: 1.2rem;
+            }
+            
+            .modal-counter {
+                font-size: 1rem;
+                bottom: -35px;
+            }
         }
 
         @media (max-width: 576px) {
@@ -927,6 +1091,25 @@
                 font-size: 0.9rem;
                 min-width: 120px;
             }
+            
+            .modal-content {
+                max-width: 95%;
+                max-height: 80%;
+            }
+            
+            .modal-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .modal-prev {
+                left: 5px;
+            }
+            
+            .modal-next {
+                right: 5px;
+            }
         }
 
         @media (max-height: 700px) {
@@ -958,6 +1141,10 @@
             
             .splash-logo img {
                 max-height: 120px;
+            }
+            
+            .modal-content {
+                max-height: 85%;
             }
         }
 
@@ -992,6 +1179,19 @@
             .service-card h3 {
                 font-size: 1.1rem;
             }
+            
+            .modal-nav {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .modal-close {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+                top: -40px;
+            }
         }
         
         .mobile-menu-btn {
@@ -1000,11 +1200,28 @@
     </style>
 </head>
 <body>
+    <!-- Модальное окно для изображений -->
+    <div class="modal-overlay" id="image-modal">
+        <button class="modal-close" id="modal-close">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="modal-nav modal-prev" id="modal-prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="modal-content">
+            <img id="modal-image" src="" alt="Увеличенное изображение">
+            <div class="modal-counter" id="modal-counter"></div>
+        </div>
+        <button class="modal-nav modal-next" id="modal-next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
     <!-- Заставка с опросом -->
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-logo">
-                <img src="PSO.PNG" alt="Логотип ПСО">
+                <img src="PSO.PNG" alt="Логотип ПСО" class="modal-image-trigger">
             </div>
             <h1 class="splash-title">Подкомитет связи с общественностью</h1>
             <h2 class="survey-title">Пожалуйста, ответьте на вопрос: "Знали ли вы, чем занимается подкомитет связи с общественностью?"</h2>
@@ -1038,7 +1255,7 @@
         <header>
             <div class="container header-content">
                 <div class="logo">
-                    <img src="PSO.PNG" alt="Логотип ПСО">
+                    <img src="PSO.PNG" alt="Логотип ПСО" class="modal-image-trigger">
                     <span>ПСО</span>
                 </div>
                 <button class="mobile-menu-btn" id="mobile-menu-btn">
@@ -1080,8 +1297,8 @@
                         <p>За годы работы мы добились значительных результатов в области общественных связей.</p>
                       
                         <p>Взаимодействуем с различными общественными организациями, государственными структурами, мед организациями и профессиональными структурами.</p><br>
-                          <div  style="width: 70%; margin: 0 auto;" class="about-image">
-                        <img src="PSO.PNG" alt="Подкомитет связи с общественностью">
+                          <div style="width: 70%; margin: 0 auto;" class="about-image">
+                        <img src="PSO.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> <br><br>
                         
                     <h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
@@ -1110,8 +1327,8 @@ Narcotics Anonymous ®
 АН как добропорядочную
 и надежную организацию</p><br>  
 <br>
-        <div  style="width: 100%; margin: 0 auto;" class="about-image">
-                        <img src="Снимок9.PNG" alt="Подкомитет связи с общественностью">
+        <div style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок9.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> <br> <br> 
 
 <h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
@@ -1121,7 +1338,7 @@ Narcotics Anonymous ®
 • Учреждения здравоохранения:
 государственные и частные<br> <br> 
 • Религиозные учреждения<br> <br> 
-• Интернет пространство<br> <br> 
+
 
 • Интернет пространство<br> <br> 
 • СМИ: печатные издания, радио<br> <br> 
@@ -1133,21 +1350,21 @@ Narcotics Anonymous ®
 
 
 </p>
-        <div  style="width: 100%; margin: 0 auto;" class="about-image">
-                        <img src="Снимок8.PNG" alt="Подкомитет связи с общественностью">
+        <div style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок8.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> 
 <br> <br> 
 
                     <h3 style="text-align: center;" class="section-subtitle"    >Ресурсы на обслуживании
 Подкомитета по связям с общественностью</h3><br> 
-<div  style="width: 100%; margin: 0 auto;" class="about-image">
-                        <img src="Снимок10.PNG" alt="Подкомитет связи с общественностью">
+<div style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок10.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> <br> <br> 
 
                     <h3 style="text-align: center;" class="section-subtitle" >Размещение информации о сообществе</h3>
 <br> 
-                    <div  style="width: 100%; margin: 0 auto;" class="about-image">
-                        <img src="Снимок11.PNG" alt="Подкомитет связи с общественностью">
+                    <div style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок11.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> <br>
 
 <h3 style="text-align: center;" class="section-subtitle"  >Взаимодействие с профессионалами</h3><br>
@@ -1188,17 +1405,11 @@ Narcotics Anonymous ®
 информационных
 носителей<br> 
 </p>
-   <div  style="width: 100%; margin: 0 auto;" class="about-image">
-                        <img src="Снимок1.PNG" alt="Подкомитет связи с общественностью">
+   <div style="width: 100%; margin: 0 auto;" class="about-image">
+                        <img src="Снимок1.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> 
-
-
-            
                     </div>
-
-                   
                 </div>
-               
             </div>
         </section>
 
@@ -1572,14 +1783,14 @@ Narcotics Anonymous ®
                             <i class="fas fa-clock"></i>
                             <span>Каждое первое воскресенье месяца в 14:00</span>
                         </div>
-                        <div>
+                        <!-- <div>
                             <i class="fas fa-phone"></i>
                             <span>+7 (XXX) XXX-XX-XX (уточняется)</span>
                         </div>
                         <div>
                             <i class="fas fa-envelope"></i>
                             <span>pso@example.ru</span>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="contact-form">
                         <h3>Место проведения собраний</h3>
@@ -1593,7 +1804,7 @@ Narcotics Anonymous ®
         <footer>
             <div class="container footer-content">
                 <div class="logo">
-                    <img src="PSO.PNG" alt="Логотип ПСО" style="max-width: 50px;">
+                    <img src="PSO.PNG" alt="Логотип ПСО" style="max-width: 50px;" class="modal-image-trigger">
                     <span>Подкомитет Связи с Общественностью</span>
                 </div>
                 <div class="social-links">
@@ -1609,8 +1820,250 @@ Narcotics Anonymous ®
         </footer>
     </div>
 
-    <script src="bot.js">
-        
+    <script>
+        // Существующий код для опроса и меню
+        document.addEventListener('DOMContentLoaded', function() {
+            // Опрос
+            const surveyItems = document.querySelectorAll('.survey-item');
+            const splashScreen = document.getElementById('splash-screen');
+            const mainSite = document.getElementById('main-site');
+            
+            surveyItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    surveyItems.forEach(i => i.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    setTimeout(() => {
+                        splashScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            splashScreen.style.display = 'none';
+                            mainSite.style.display = 'block';
+                            setTimeout(() => {
+                                mainSite.style.opacity = '1';
+                            }, 50);
+                        }, 1500);
+                    }, 1000);
+                });
+            });
+            
+            // Мобильное меню
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const navMenu = document.getElementById('nav-menu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                this.innerHTML = navMenu.classList.contains('active') ? 
+                    '<i class="fas fa-times"></i>' : 
+                    '<i class="fas fa-bars"></i>';
+            });
+            
+            // Закрытие меню при клике на ссылку
+            document.querySelectorAll('nav a').forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('active');
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                });
+            });
+            
+            // Анимация карточек услуг при скролле
+            const serviceCards = document.querySelectorAll('.service-card');
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            serviceCards.forEach(card => {
+                observer.observe(card);
+            });
+            
+            // Кнопки "Подробнее" в услугах
+            document.querySelectorAll('.details-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.service-card');
+                    const details = card.querySelector('.service-details');
+                    const isVisible = details.classList.contains('visible');
+                    
+                    if (isVisible) {
+                        details.classList.remove('visible');
+                        details.classList.add('hidden');
+                        this.textContent = 'Подробнее';
+                        setTimeout(() => {
+                            details.style.display = 'none';
+                        }, 500);
+                    } else {
+                        details.style.display = 'block';
+                        details.classList.remove('hidden');
+                        details.classList.add('visible');
+                        this.textContent = 'Скрыть';
+                    }
+                });
+            });
+            
+            // Плавная прокрутка
+            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 70,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // КОД ДЛЯ МОДАЛЬНОГО ОКНА С ИЗОБРАЖЕНИЯМИ
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalClose = document.getElementById('modal-close');
+            const modalPrev = document.getElementById('modal-prev');
+            const modalNext = document.getElementById('modal-next');
+            const modalCounter = document.getElementById('modal-counter');
+            
+            let images = [];
+            let currentImageIndex = 0;
+            
+            // Находим все изображения с классом modal-image-trigger
+            const imageTriggers = document.querySelectorAll('.modal-image-trigger');
+            
+            // Заполняем массив изображений
+            imageTriggers.forEach((img, index) => {
+                images.push({
+                    src: img.src,
+                    alt: img.alt
+                });
+                
+                // Добавляем обработчик клика
+                img.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    currentImageIndex = index;
+                    openModal();
+                });
+            });
+            
+            // Функция открытия модального окна
+            function openModal() {
+                if (images.length === 0) return;
+                
+                updateModalImage();
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.addEventListener('keydown', handleKeyDown);
+            }
+            
+            // Функция закрытия модального окна
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+            
+            // Функция обновления изображения в модальном окне
+            function updateModalImage() {
+                if (images.length === 0) return;
+                
+                const image = images[currentImageIndex];
+                modalImage.src = image.src;
+                modalImage.alt = image.alt;
+                modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+                
+                // Показываем/скрываем кнопки навигации
+                modalPrev.style.display = images.length > 1 ? 'flex' : 'none';
+                modalNext.style.display = images.length > 1 ? 'flex' : 'none';
+                modalCounter.style.display = images.length > 1 ? 'block' : 'none';
+            }
+            
+            // Функция для перехода к следующему изображению
+            function nextImage() {
+                if (images.length === 0) return;
+                
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                updateModalImage();
+            }
+            
+            // Функция для перехода к предыдущему изображению
+            function prevImage() {
+                if (images.length === 0) return;
+                
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                updateModalImage();
+            }
+            
+            // Обработчик клавиатуры
+            function handleKeyDown(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                } else if (e.key === 'ArrowRight') {
+                    nextImage();
+                } else if (e.key === 'ArrowLeft') {
+                    prevImage();
+                }
+            }
+            
+            // Закрытие по клику на фон
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal || e.target.classList.contains('modal-overlay')) {
+                    closeModal();
+                }
+            });
+            
+            // Назначение обработчиков
+            modalClose.addEventListener('click', closeModal);
+            modalNext.addEventListener('click', nextImage);
+            modalPrev.addEventListener('click', prevImage);
+            
+            // Блокируем всплытие события для элементов внутри модального окна
+            modal.querySelector('.modal-content').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+            
+            // Обработка свайпов на мобильных устройствах
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            modal.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            modal.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    nextImage();
+                } else if (touchEndX > touchStartX + swipeThreshold) {
+                    prevImage();
+                }
+            }
+            
+            // Предзагрузка изображений для плавной навигации
+            function preloadImages() {
+                images.forEach(img => {
+                    const image = new Image();
+                    image.src = img.src;
+                });
+            }
+            
+            window.addEventListener('load', preloadImages);
+        });
     </script>
+    <script src="bot.js"> </script>
 </body>
 </html>
