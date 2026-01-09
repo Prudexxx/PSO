@@ -275,6 +275,7 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            position: relative;
         }
 
         .logo {
@@ -283,6 +284,7 @@
             color: var(--text-color);
             display: flex;
             align-items: center;
+            z-index: 101;
         }
 
         .logo img {
@@ -301,6 +303,7 @@
             display: flex;
             list-style: none;
             flex-wrap: wrap;
+            transition: all 0.3s ease;
         }
 
         nav li {
@@ -315,6 +318,8 @@
             transition: color 0.3s;
             position: relative;
             white-space: nowrap;
+            display: block;
+            padding: 5px 0;
         }
 
         nav a:hover {
@@ -343,7 +348,12 @@
             border: none;
             color: var(--text-color);
             cursor: pointer;
-            padding: 0px;
+            z-index: 101;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
         /* Герой секция */
@@ -906,9 +916,7 @@
 
         @media (max-width: 768px) {
             .mobile-menu-btn {
-                display: block;
-                position: relative;
-                right: 0px;
+                display: flex;
             }
             
             nav ul {
@@ -920,10 +928,12 @@
                 background: var(--bg-color);
                 flex-direction: column;
                 align-items: center;
-                padding-top: 30px;
-                transition: left 0.3s ease;
+                justify-content: flex-start;
+                padding-top: 40px;
+                transition: left 0.4s ease;
                 box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
                 z-index: 99;
+                overflow-y: auto;
             }
             
             nav ul.active {
@@ -931,15 +941,26 @@
             }
             
             nav li {
-                margin: 12px 0;
-                width: 100%;
+                margin: 0;
+                width: 80%;
                 text-align: center;
+                margin-bottom: 20px;
             }
             
             nav a {
                 display: block;
-                padding: 10px;
-                font-size: 1.1rem;
+                padding: 15px;
+                font-size: 1.2rem;
+                border-bottom: 1px solid rgba(61, 172, 170, 0.1);
+                width: 100%;
+            }
+            
+            nav a:hover {
+                background: rgba(61, 172, 170, 0.1);
+            }
+            
+            nav a::after {
+                display: none;
             }
             
             .hero {
@@ -1149,6 +1170,7 @@
         }
 
         @media (max-width: 400px) {
+            
             .hero h1 {
                 font-size: 1.5rem;
             }
@@ -1192,10 +1214,9 @@
                 font-size: 1rem;
                 top: -40px;
             }
-        }
-        
-        .mobile-menu-btn {
+                .mobile-menu-btn {
             margin-left: auto;
+        }
         }
     </style>
 </head>
@@ -1224,7 +1245,7 @@
                 <img src="PSO.PNG" alt="Логотип ПСО" class="modal-image-trigger">
             </div>
             <h1 class="splash-title">Подкомитет связи с общественностью</h1>
-            <h2 class="survey-title">Пожалуйста, ответьте на вопрос: "Знали ли вы, чем занимается подкомитет связи с общественностью?"</h2>
+            <h2 class="survey-title">Пожалуйста, ответьте на вопрос: "Знали ли вы, чем занимается Подкомитет Связи с Общественностью?"</h2>
             <div class="survey-container">
                 <div class="survey-item" data-question="1">
                     <div class="circle">1</div>
@@ -1258,7 +1279,7 @@
                     <img src="PSO.PNG" alt="Логотип ПСО" class="modal-image-trigger">
                     <span>ПСО</span>
                 </div>
-                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Открыть меню">
                     <i class="fas fa-bars"></i>
                 </button>
                 <nav>
@@ -1277,7 +1298,7 @@
             <div class="container">
                 <h1>Подкомитет Связи с Общественностью</h1>
                 <p>Объединяем усилия для эффективного взаимодействия с обществом</p>
-                  <p>Добавляйся в рабочий чат и внеси свою  историю с дружным коллективом ПСО</p>
+                <p>Добавляйся в рабочий чат и внеси свою  историю с дружным коллективом ПСО</p>
                 <a href="https://t.me/+wQkCGHrwf6IzMmIy" target="_blank" class="hero-btn">Чат ПСО</a>
             </div>
         </section>
@@ -1302,7 +1323,7 @@
                     </div> <br><br>
                         
                     <h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
-Подкомитета по связям с общественностью:</h3> 
+Подкомитета по Связям с Общественностью:</h3> 
 <p> 1. Мы уточняем, какие услуги
 сообщество может оказывать
 обществу, а какие – нет <br><br>
@@ -1331,8 +1352,7 @@ Narcotics Anonymous ®
                         <img src="Снимок9.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> <br> <br> 
 
-<h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
-Подкомитета по связям с общественностью:</h3><br> 
+<h3 style="text-align: center;" class="section-subtitle">Основные направления деятельности Подкомитета по Связям с Общественностью:</h3><br> 
  <p>• Государственные учреждения:
 ФСИН, МВД и т.д.<br> <br> 
 • Учреждения здравоохранения:
@@ -1356,7 +1376,7 @@ Narcotics Anonymous ®
 <br> <br> 
 
                     <h3 style="text-align: center;" class="section-subtitle"    >Ресурсы на обслуживании
-Подкомитета по связям с общественностью</h3><br> 
+Подкомитета по Связям с Общественностью</h3><br> 
 <div style="width: 100%; margin: 0 auto;" class="about-image">
                         <img src="Снимок10.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
                     </div> <br> <br> 
@@ -1783,14 +1803,6 @@ Narcotics Anonymous ®
                             <i class="fas fa-clock"></i>
                             <span>Каждое первое воскресенье месяца в 14:00</span>
                         </div>
-                        <!-- <div>
-                            <i class="fas fa-phone"></i>
-                            <span>+7 (XXX) XXX-XX-XX (уточняется)</span>
-                        </div>
-                        <div>
-                            <i class="fas fa-envelope"></i>
-                            <span>pso@example.ru</span>
-                        </div> -->
                     </div>
                     <div class="contact-form">
                         <h3>Место проведения собраний</h3>
@@ -1820,250 +1832,9 @@ Narcotics Anonymous ®
         </footer>
     </div>
 
-    <script>
-        // Существующий код для опроса и меню
-        document.addEventListener('DOMContentLoaded', function() {
-            // Опрос
-            const surveyItems = document.querySelectorAll('.survey-item');
-            const splashScreen = document.getElementById('splash-screen');
-            const mainSite = document.getElementById('main-site');
-            
-            surveyItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    surveyItems.forEach(i => i.classList.remove('selected'));
-                    this.classList.add('selected');
-                    
-                    setTimeout(() => {
-                        splashScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            splashScreen.style.display = 'none';
-                            mainSite.style.display = 'block';
-                            setTimeout(() => {
-                                mainSite.style.opacity = '1';
-                            }, 50);
-                        }, 1500);
-                    }, 1000);
-                });
-            });
-            
-            // Мобильное меню
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const navMenu = document.getElementById('nav-menu');
-            
-            mobileMenuBtn.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-                this.innerHTML = navMenu.classList.contains('active') ? 
-                    '<i class="fas fa-times"></i>' : 
-                    '<i class="fas fa-bars"></i>';
-            });
-            
-            // Закрытие меню при клике на ссылку
-            document.querySelectorAll('nav a').forEach(link => {
-                link.addEventListener('click', function() {
-                    navMenu.classList.remove('active');
-                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-                });
-            });
-            
-            // Анимация карточек услуг при скролле
-            const serviceCards = document.querySelectorAll('.service-card');
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animated');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-            
-            serviceCards.forEach(card => {
-                observer.observe(card);
-            });
-            
-            // Кнопки "Подробнее" в услугах
-            document.querySelectorAll('.details-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const card = this.closest('.service-card');
-                    const details = card.querySelector('.service-details');
-                    const isVisible = details.classList.contains('visible');
-                    
-                    if (isVisible) {
-                        details.classList.remove('visible');
-                        details.classList.add('hidden');
-                        this.textContent = 'Подробнее';
-                        setTimeout(() => {
-                            details.style.display = 'none';
-                        }, 500);
-                    } else {
-                        details.style.display = 'block';
-                        details.classList.remove('hidden');
-                        details.classList.add('visible');
-                        this.textContent = 'Скрыть';
-                    }
-                });
-            });
-            
-            // Плавная прокрутка
-            document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 70,
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-            
-            // КОД ДЛЯ МОДАЛЬНОГО ОКНА С ИЗОБРАЖЕНИЯМИ
-            const modal = document.getElementById('image-modal');
-            const modalImage = document.getElementById('modal-image');
-            const modalClose = document.getElementById('modal-close');
-            const modalPrev = document.getElementById('modal-prev');
-            const modalNext = document.getElementById('modal-next');
-            const modalCounter = document.getElementById('modal-counter');
-            
-            let images = [];
-            let currentImageIndex = 0;
-            
-            // Находим все изображения с классом modal-image-trigger
-            const imageTriggers = document.querySelectorAll('.modal-image-trigger');
-            
-            // Заполняем массив изображений
-            imageTriggers.forEach((img, index) => {
-                images.push({
-                    src: img.src,
-                    alt: img.alt
-                });
-                
-                // Добавляем обработчик клика
-                img.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    currentImageIndex = index;
-                    openModal();
-                });
-            });
-            
-            // Функция открытия модального окна
-            function openModal() {
-                if (images.length === 0) return;
-                
-                updateModalImage();
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                document.addEventListener('keydown', handleKeyDown);
-            }
-            
-            // Функция закрытия модального окна
-            function closeModal() {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                document.removeEventListener('keydown', handleKeyDown);
-            }
-            
-            // Функция обновления изображения в модальном окне
-            function updateModalImage() {
-                if (images.length === 0) return;
-                
-                const image = images[currentImageIndex];
-                modalImage.src = image.src;
-                modalImage.alt = image.alt;
-                modalCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
-                
-                // Показываем/скрываем кнопки навигации
-                modalPrev.style.display = images.length > 1 ? 'flex' : 'none';
-                modalNext.style.display = images.length > 1 ? 'flex' : 'none';
-                modalCounter.style.display = images.length > 1 ? 'block' : 'none';
-            }
-            
-            // Функция для перехода к следующему изображению
-            function nextImage() {
-                if (images.length === 0) return;
-                
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-                updateModalImage();
-            }
-            
-            // Функция для перехода к предыдущему изображению
-            function prevImage() {
-                if (images.length === 0) return;
-                
-                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-                updateModalImage();
-            }
-            
-            // Обработчик клавиатуры
-            function handleKeyDown(e) {
-                if (e.key === 'Escape') {
-                    closeModal();
-                } else if (e.key === 'ArrowRight') {
-                    nextImage();
-                } else if (e.key === 'ArrowLeft') {
-                    prevImage();
-                }
-            }
-            
-            // Закрытие по клику на фон
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal || e.target.classList.contains('modal-overlay')) {
-                    closeModal();
-                }
-            });
-            
-            // Назначение обработчиков
-            modalClose.addEventListener('click', closeModal);
-            modalNext.addEventListener('click', nextImage);
-            modalPrev.addEventListener('click', prevImage);
-            
-            // Блокируем всплытие события для элементов внутри модального окна
-            modal.querySelector('.modal-content').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-            
-            // Обработка свайпов на мобильных устройствах
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            modal.addEventListener('touchstart', function(e) {
-                touchStartX = e.changedTouches[0].screenX;
-            });
-            
-            modal.addEventListener('touchend', function(e) {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            });
-            
-            function handleSwipe() {
-                const swipeThreshold = 50;
-                
-                if (touchEndX < touchStartX - swipeThreshold) {
-                    nextImage();
-                } else if (touchEndX > touchStartX + swipeThreshold) {
-                    prevImage();
-                }
-            }
-            
-            // Предзагрузка изображений для плавной навигации
-            function preloadImages() {
-                images.forEach(img => {
-                    const image = new Image();
-                    image.src = img.src;
-                });
-            }
-            
-            window.addEventListener('load', preloadImages);
-        });
+    <script src="bot.js">
+       
     </script>
-    <script src="bot.js"> </script>
 </body>
 </html>
+
