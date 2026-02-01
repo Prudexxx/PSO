@@ -733,31 +733,21 @@
             color: white;
         }
 
-        .social-links {
-            display: flex;
-            margin: 15px 0;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
 
         .social-links a {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 35px;
-            height: 35px;
+            color: #a70808;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            margin: 0 8px;
-            color: white;
+            
+            margin:18px;
+           
             font-size: 1rem;
             transition: all 0.3s ease;
         }
 
-        .social-links a:hover {
-            background: var(--subtitle-color);
-            transform: translateY(-5px);
-        }
+     
 
         .copyright {
             margin-top: 15px;
@@ -1218,6 +1208,14 @@
             margin-left: auto;
         }
         }
+        .social-links {
+ 
+  flex-direction: column; /* вертикальное расположение всех элементов */
+  gap: 10px; /* расстояние между строками */
+}
+
+
+
     </style>
 </head>
 <body>
@@ -1245,7 +1243,7 @@
                 <img src="PSO.PNG" alt="Логотип ПСО" class="modal-image-trigger">
             </div>
             <h1 class="splash-title">Подкомитет связи с общественностью</h1>
-            <h2 class="survey-title">Пожалуйста, ответьте на вопрос: "Знали ли вы, чем занимается Подкомитет Связи с Общественностью?"</h2>
+            <h2 class="survey-title">Пожалуйста, ответьте на вопрос: "Знаете ли вы, чем занимается Подкомитет Связи с Общественностью?"</h2>
             <div class="survey-container">
                 <div class="survey-item" data-question="1">
                     <div class="circle">1</div>
@@ -1253,7 +1251,7 @@
                 </div>
                 <div class="survey-item" data-question="2">
                     <div class="circle">2</div>
-                    <div class="survey-question">Знал все о подкомитете</div>
+                    <div class="survey-question">Знаю все о подкомитете</div>
                 </div>
                 <div class="survey-item" data-question="3">
                     <div class="circle">3</div>
@@ -1321,7 +1319,7 @@
                          
                          <h3 class="section-subtitle">Цели  СО:</h3>
                         
-                        <p>&#9989;  Помочь тем зависимым, которые все еще страдают
+                        <p>&#9989;  Помочь тем зависимым, которые все еще страдают,
 найти АН <br>
 &#9989;   Развивать отношения с профессионалами
 основываясь на сотрудничестве<br>
@@ -1332,10 +1330,10 @@
 обществе</p><br>
                         
                         
-                        
+<!--                         
                         <div style="width: 70%; margin: 0 auto;" class="about-image">
                         <img src="PSO.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
-                    </div> <br><br>
+                    </div> <br><br> -->
                         
                     <h3 style="text-align: center;" class="section-subtitle">Основные и самые важные задачи
 Подкомитета по Связям с Общественностью:</h3> 
@@ -1360,10 +1358,9 @@
 общественность воспринимала
 АН как добропорядочную
 и надежную организацию</p><br>  
-<br>
-        <div style="width: 100%; margin: 0 auto;" class="about-image">
-                        <img src="Снимок9.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
-                    </div> <br> <br> 
+<br>     <div style="width: 70%; margin: 0 auto;" class="about-image">
+                        <img src="PSO.PNG" alt="Подкомитет связи с общественностью" class="modal-image-trigger">
+                    </div> <br><br>
 
 <h3 style="text-align: center;" class="section-subtitle">Основные направления деятельности Подкомитета по Связям с Общественностью:</h3><br> 
  <p>&#128293;  Государственные учреждения:
@@ -1787,7 +1784,7 @@
                     </div>
                 </div> -->
 
-            <div class="service-card" data-vacant="true">
+            <div class="service-card" data-vacant="false">
                 <div class="service-icon">
                     <i class="fas fa-tasks"></i>
                 </div>
@@ -1975,12 +1972,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="logo">
                     <img src="PSO.PNG" alt="Логотип ПСО" style="max-width: 50px;" class="modal-image-trigger">
                     <span>Подкомитет Связи с Общественностью</span>
+                 
                 </div>
-                <div class="social-links">
-                    <a href="https://t.me/+wQkCGHrwf6IzMmIy" target="_blank"><i class="fab fa-telegram"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    <a href="#"><i class="fab fa-vk"></i></a>
-                </div>
+           <div class="social-links">
+            <h2>Полезные ссылки:</h2>
+  <div>
+   
+    <a href="https://t.me/+wQkCGHrwf6IzMmIy" target="_blank">чат ПСО в телеграмме</a>
+  </div>
+  <div>
+   
+    <a href="https://na-russia.org/online" target="_blank">Онлайн собрания России</a>
+  </div>
+   <div>
+  
+    <a href=" https://clck.ru/YtbBt"  target="_blank">YouTube канал</a>
+  </div>
+    <div>
+
+    <a href=" https://rutube.ru/channel/44965118/"  target="_blank">Rutube канал</a>
+  </div>
+    <div>
+   
+    <a href="https://clck.ru/Z5HgM"  target="_blank">Яндекс.Zen</a>
+  </div>
+
+     <div>
+  
+    <a href="https://radio-na.ru/"  target="_blank">Радио АН 24/7</a>
+  </div>
+
+        <div>
+        
+        <a href=" https://t.me/NA_PRM59_bot"  target="_blank">Телеграмм бот</a>
+    </div>
+
+     <div>
+    
+    <a href="https://vk.com/naprm"  target="_blank"> Вконтакте</a>
+  </div>
+  <div>
+ 
+    <a href="https://na-prm.ru" >Сайт АН</a>
+  </div>
+</div>
                 <div class="copyright">
                     &copy; 2026 Подкомитет Связи с Общественностью. Все права защищены.<br>
                     Пермь, Россия
@@ -1994,4 +2029,5 @@ document.addEventListener('DOMContentLoaded', function() {
     </script>
 </body>
 </html>
+
 
